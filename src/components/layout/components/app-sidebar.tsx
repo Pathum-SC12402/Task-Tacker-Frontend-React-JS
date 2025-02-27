@@ -5,7 +5,8 @@ import {
   Settings2,
   SquareTerminal,
   ClipboardList,
-  Mail
+  Mail,
+  FilePlus
 } from "lucide-react"
 import { NavMain } from "@/components/layout/components/nav-main"
 import { NavSecondary } from "@/components/layout/components/nav-secondary"
@@ -33,6 +34,12 @@ const data = {
       title: "Dashboard",
       url: "/Dashboard",
       icon: SquareTerminal,
+      isActive: true,
+    },
+    {
+      title: "Add Plans",
+      url: "/Dashboard/Add_Plans",
+      icon: FilePlus,
       isActive: true,
     },
     {

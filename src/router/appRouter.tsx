@@ -4,6 +4,7 @@ import Layout from "@/components/layout/index";
 import NotFoundPage from "@/pages/auth/notFoundPage";
 import DashboardPage from "@/pages/dashboard/dashboardPage";
 import PlansPage from "@/pages/plans/index";
+import AddPlansPage from "@/pages/plans/pages/addPlanPage";
 
 export default function AppRouter() {
   return (
@@ -12,6 +13,7 @@ export default function AppRouter() {
         <Route path="/*" element={<Page />} />
         <Route path="/Dashboard/" element={<Layout />} >
           <Route path="" element={<DashboardPage />} />
+          <Route path="Add_Plans" element={<AddPlansPage/>} />
           <Route path="Plans/*" element={<PlansPage/>} />
           
           <Route path="*" element={<NotFoundPage />} />
