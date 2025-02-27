@@ -7,7 +7,6 @@ import {
   ClipboardList,
   Mail
 } from "lucide-react"
-import { CalendarComponent } from "@/components/layout/components/calendars"
 import { NavMain } from "@/components/layout/components/nav-main"
 import { NavSecondary } from "@/components/layout/components/nav-secondary"
 import { NavUser } from "@/components/layout/components/nav-user"
@@ -107,7 +106,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} className="font-bold" />
         <SidebarContent>
           <SidebarSeparator className="mx-0" />
-          <CalendarComponent />
         </SidebarContent>
         <NavSecondary items={data.navSecondary} className="mt-auto font-bold" />
       </SidebarContent>

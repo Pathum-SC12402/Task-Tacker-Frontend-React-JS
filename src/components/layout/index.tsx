@@ -14,8 +14,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet, useLocation } from "react-router-dom"; // Import useLocation to dynamically update breadcrumb
+import { Outlet, useLocation } from "react-router-dom";
 import { ModeToggle } from "../theme/mode-toggle";
+import { SidebarRight } from "./components/right-sidebar";
 
 export default function Layout() {
   const location = useLocation();
@@ -64,6 +65,7 @@ export default function Layout() {
           <Outlet />
         </div>
       </SidebarInset>
+      <SidebarRight />
     </SidebarProvider>
   );
 }
