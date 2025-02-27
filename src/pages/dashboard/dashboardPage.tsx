@@ -19,11 +19,8 @@ const recentTasks = [
 
 export default function DashboardPage() {
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
+    <div className="p-6 space-y-6 over">
       <h1 className="text-3xl font-bold">Dashboard</h1>
-
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
@@ -53,7 +50,6 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      {/* Recent Tasks Table */}
       <Card>
         <CardHeader>
           <CardTitle>Recent Tasks</CardTitle>
@@ -92,7 +88,6 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Weekly Task Progress Chart */}
       <Card>
         <CardHeader>
           <CardTitle>Task Progress (Weekly)</CardTitle>
