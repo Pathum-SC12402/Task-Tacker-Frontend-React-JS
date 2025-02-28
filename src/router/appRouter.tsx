@@ -3,18 +3,25 @@ import Page from "@/components/auth/index";
 import Layout from "@/components/layout/index";
 import NotFoundPage from "@/pages/auth/notFoundPage";
 import DashboardPage from "@/pages/dashboard/dashboardPage";
-import PlansPage from "@/pages/plans/index";
-import AddPlansPage from "@/pages/plans/pages/addPlanPage";
+
+import AddPlansPage from "@/pages/plans/addPlanPage";
+import TodayPlanPage from "@/pages/plans/todayPlanPage";
+import PastPlanPage from "@/pages/plans/pastPlanPage";
+import FuturePlanPage from "@/pages/plans/futurePlanPage";
+import StartPage from "@/pages/plans/startPage";
 
 export default function AppRouter() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<StartPage />} />
         <Route path="/*" element={<Page />} />
         <Route path="/Dashboard/" element={<Layout />} >
           <Route path="" element={<DashboardPage />} />
           <Route path="Add_Plans" element={<AddPlansPage/>} />
-          <Route path="Plans/*" element={<PlansPage/>} />
+          <Route path="Plans/Today_Plans" element={<TodayPlanPage/>} />
+          <Route path="Plans/Past_Plans" element={<PastPlanPage/>} />
+          <Route path="Plans/Future_Plans" element={<FuturePlanPage />} />
           
           <Route path="*" element={<NotFoundPage />} />
         </Route>

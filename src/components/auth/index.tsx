@@ -7,9 +7,8 @@ export default function PlansPage() {
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
         <Routes>
-          <Route path="/" element={<LoginForm />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="Login" element={<LoginForm />} />
+          <Route path="Signup" element={<SignUpForm />} />
         </Routes>
       </div>
     </div>
