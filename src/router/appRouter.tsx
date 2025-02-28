@@ -8,7 +8,7 @@ import AddPlansPage from "@/pages/plans/addPlanPage";
 import TodayPlanPage from "@/pages/plans/todayPlanPage";
 import PastPlanPage from "@/pages/plans/pastPlanPage";
 import FuturePlanPage from "@/pages/plans/futurePlanPage";
-import StartPage from "@/pages/plans/startPage";
+import StartPage from "@/pages/home/startPage";
 
 export default function AppRouter() {
   return (
