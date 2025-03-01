@@ -4,11 +4,12 @@ import Layout from "@/components/layout/index";
 import NotFoundPage from "@/pages/auth/notFoundPage";
 import DashboardPage from "@/pages/dashboard/dashboardPage";
 
-import AddPlansPage from "@/pages/plans/addPlanPage";
-import TodayPlanPage from "@/pages/plans/todayPlanPage";
-import PastPlanPage from "@/pages/plans/pastPlanPage";
-import FuturePlanPage from "@/pages/plans/futurePlanPage";
+import AddPlansPage from "@/pages/pages/addPlanPage";
+import TodayPlanPage from "@/pages/pages/todayPlanPage";
+import PastPlanPage from "@/pages/pages/pastPlanPage";
+import FuturePlanPage from "@/pages/pages/futurePlanPage";
 import StartPage from "@/pages/home/startPage";
+import ContactUsPage from "@/pages/pages/contactUsPage";
 
 export default function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
           <Route path="Plans/Today_Plans" element={<TodayPlanPage/>} />
           <Route path="Plans/Past_Plans" element={<PastPlanPage/>} />
           <Route path="Plans/Future_Plans" element={<FuturePlanPage />} />
+          <Route path="Contact_Us" element={<ContactUsPage/>} />
           
           <Route path="*" element={<NotFoundPage />} />
         </Route>

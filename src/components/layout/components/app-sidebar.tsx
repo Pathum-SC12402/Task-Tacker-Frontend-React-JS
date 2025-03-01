@@ -65,7 +65,7 @@ const data = {
   navSecondary: [
     {
       title: "Contact Us",
-      url: "#",
+      url: "/Dashboard/Contact_Us",
       icon: Mail,
     },
     {
