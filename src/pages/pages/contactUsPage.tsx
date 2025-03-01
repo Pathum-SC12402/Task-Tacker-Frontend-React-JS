@@ -12,7 +12,7 @@ export default function ContactUsPage() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center h-screen bg-background p-4">
+        <div className="flex justify-center items-center bg-background p-4">
             <Card className="w-full max-w-lg">
                 <CardHeader>
                     <CardTitle className="text-center text-2xl">Contact Us</CardTitle>

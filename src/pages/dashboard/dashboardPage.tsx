@@ -19,7 +19,7 @@ const recentTasks = [
 
 export default function DashboardPage() {
   return (
-    <div className="p-6 space-y-6 over">
+    <div className="p-4 space-y-4 over">
       <h1 className="text-3xl font-bold">Dashboard</h1>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <Card>

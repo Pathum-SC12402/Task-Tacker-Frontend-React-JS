@@ -28,7 +28,7 @@ export default function StartPage() {
         {/* Sign In & Sign Up Buttons */}
         <div className="space-x-4">
           <Link to="Login">
-            <Button variant="outline" className="border-white text-white hover:bg-gray-800">
+            <Button variant="outline" className="bg-white border-white">
               Sign In
             </Button>
           </Link>
@@ -88,7 +88,8 @@ export default function StartPage() {
       {/* Contact Us Section */}
       <motion.footer 
         id="contact-section"
-        className="bg-blue bg-opacity-50 text-white text-center p-6"
+        //flex items-center justify-between px-6 py-4 bg-black bg-opacity-50
+        className=" bg-opacity-50 bg-black dark:bg-blue-950 text-center p-6"
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.8 }}
