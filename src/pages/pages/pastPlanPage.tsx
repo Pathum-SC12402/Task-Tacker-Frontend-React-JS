@@ -1,6 +1,10 @@
 import TaskCard from "@/components/parts/taskCard";
 
-export default function PastPlanPage() {
+interface PastPlanPageProps {
+  userId: string | null;
+}
+
+export default function PastPlanPage({ userId }: PastPlanPageProps) {
   return (
     <div className="bg-gray-300 flex flex-col p-4">
       <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Past Plans</h1>

@@ -1,20 +1,63 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Link } from "react-router-dom"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import httpRequest from "@/api/request";
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export function LoginForm({ className, ...props }: LoginFormProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+  
+    try {
+      const response = await httpRequest.post("/auth/signin", {
+        email,
+        password,
+      });
+  
+      const data = response.data;
+  
+      if (data.success) {
+        alert(data.message);
+        localStorage.setItem("token", data.token);
+
+        const userResponse = await httpRequest.get(`/data/getUserId?email=${email}`);
+            if (userResponse.status !== 200) {
+                throw new Error("Failed to fetch user ID");
+            }
+            const userData = userResponse.data;
+            const userId = userData.userId;
+
+            localStorage.setItem("userId", userId);
+            console.log("User ID:", userId);
+
+        navigate(`/dashboard`);
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+    }
+  };  
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -25,7 +68,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -33,6 +76,8 @@ export function LoginForm({
                   id="email"
                   type="email"
                   placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -46,8 +91,15 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
+              {error && <p className="text-red-500 text-sm">{error}</p>}
               <Button type="submit" className="w-full">
                 Login
               </Button>
@@ -57,7 +109,7 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Link to="/Signup" className="underline underline-offset-4">
+              <Link to="/signup" className="underline underline-offset-4">
                 Sign up
               </Link>
             </div>
@@ -65,5 +117,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

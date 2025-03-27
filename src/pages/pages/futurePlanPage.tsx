@@ -1,6 +1,9 @@
 import TaskCard from "@/components/parts/taskCard";
 
-export default function FuturePlanPage() {
+interface FuturePlanPageProps {
+  userId: string | null;
+}
+export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
   return (
     <div className="bg-gray-300 flex flex-col p-4">
       <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Future Plans</h1>

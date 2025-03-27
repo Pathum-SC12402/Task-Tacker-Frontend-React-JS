@@ -10,31 +10,26 @@ interface TaskCardProps {
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
-  date = new Date().toISOString().split("T")[0], // Default: Today's date
-  title = "Untitled Task", // Default title
-  totalSubtasks = 1, // Prevents division by zero
-  completedSubtasks = 0, // Default: None completed
+  date = new Date().toISOString().split("T")[0],
+  title,
+  totalSubtasks,
+  completedSubtasks,
 }) => {
-  const completionPercentage = totalSubtasks ? Math.round((completedSubtasks / totalSubtasks) * 100) : 0;
+  const completionPercentage = totalSubtasks
+    ? Math.round(((completedSubtasks || 0) / totalSubtasks) * 100)
+    : 0;
 
   return (
     <Card className="p-6 rounded-2xl shadow-lg border hover:shadow-xl transition-all">
-      {/* Date Section */}
       <div className="flex items-center space-x-2 text-sm">
         <CalendarIcon className="w-4 h-4" />
         <span>{date}</span>
       </div>
-
-      {/* Title */}
       <h3 className="text-lg font-semibold text-gray-600 mt-2">{title}</h3>
-
-      {/* Task Progress */}
       <p className="text-sm mt-1">
         {completedSubtasks} / {totalSubtasks} subtasks completed
       </p>
       <Progress value={completionPercentage} className="h-3 mt-2" />
-
-      {/* Completion Percentage */}
       <div className="flex items-center justify-between mt-3">
         <p className="text-sm font-medium">{completionPercentage}%</p>
         {completionPercentage === 100 && (

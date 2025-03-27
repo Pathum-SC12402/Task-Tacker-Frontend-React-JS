@@ -17,7 +17,10 @@ const recentTasks = [
   { task: "Bug Fixing", status: "Pending", dueDate: "Mar 2, 2025" },
 ];
 
-export default function DashboardPage() {
+interface DashboardPageProps {
+  userId: string | null;
+}
+export default function DashboardPage({ userId }: DashboardPageProps) {
   return (
     <div className="p-4 space-y-4 over">
       <h1 className="text-3xl font-bold">Dashboard</h1>
