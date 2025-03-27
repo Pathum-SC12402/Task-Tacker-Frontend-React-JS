@@ -47,7 +47,7 @@ export default function TodayPlanPage({ userId }: TodayPlanPageProps) {
   }, [userId]);
 
   return (
-    <div className="bg-gray-300 h-full">
+    <div className="bg-gray-300 h-full rounded-md">
       <div className="flex flex-col p-4">
         <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">
           Today's Plans

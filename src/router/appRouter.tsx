@@ -21,7 +21,7 @@ export default function AppRouter() {
         <Route path="/*" element={<Page />} />
         <Route path="/Dashboard/" element={<Layout />} >
           <Route path="" element={<DashboardPage userId={userId}/>} />
-          <Route path="Add_Plans" element={<AddPlansPage/>} />
+          <Route path="Add_Plans" element={<AddPlansPage userId={userId}/>} />
           <Route path="Plans/Today_Plans" element={<TodayPlanPage userId={userId}/>} />
           <Route path="Plans/Past_Plans" element={<PastPlanPage userId={userId}/>} />
           <Route path="Plans/Future_Plans" element={<FuturePlanPage userId={userId}/>} />
