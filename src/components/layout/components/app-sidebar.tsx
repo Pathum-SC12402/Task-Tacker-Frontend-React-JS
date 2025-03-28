@@ -44,20 +44,20 @@ const data = {
     },
     {
       title: "Plans",
-      url: "/Dashboard/Plans/Today_Plans",
+      url: "#",
       icon: ClipboardList,
       items: [
         {
           title: "Today Plans",
-          url: "/Dashboard/Plans/Today_Plans",
+          url: "/Dashboard/Today_Plans",
         },
         {
           title: "Past Plans",
-          url: "/Dashboard/Plans/Past_Plans",
+          url: "/Dashboard/Past_Plans",
         },
         {
           title: "Future Plans",
-          url: "/Dashboard/Plans/Future_Plans",
+          url: "/Dashboard/Future_Plans",
         },
       ],
     },
