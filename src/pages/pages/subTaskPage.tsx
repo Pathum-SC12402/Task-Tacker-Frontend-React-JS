@@ -29,8 +29,6 @@ export default function SubTaskPage() {
                     ...prevSubTasks,
                     { _id: response.data._id, title: newTaskTitle, completed: isCompleted }
                 ]);
-
-                // Close modal & reset inputs
                 setIsModalOpen(false);
                 setNewTaskTitle("");
                 setIsCompleted(false);

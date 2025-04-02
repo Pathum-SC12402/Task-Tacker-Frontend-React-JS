@@ -4,6 +4,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash } from "lucide-react";
 import httpRequest from "@/api/request";
+import DeleteConfirmation from "@/components/parts/deleteConf";
+import UpdateSubTaskPopup from "@/components/parts/updateSubTask"; // Import the update popup component
 
 interface SubTaskCardProps {
   taskId: string;
@@ -15,15 +17,11 @@ interface SubTask {
   completed: boolean;
 }
 
-interface UpdatedData {
-  title?: string;
-  completed?: boolean;
-}
-
-export default function SubTaskCard({ taskId }: SubTaskCardProps) { 
+export default function SubTaskCard({ taskId }: SubTaskCardProps) {
   const [subTasks, setSubTasks] = useState<SubTask[]>([]);
-
-  console.log("Task ID:", taskId); // Debugging
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedSubTask, setSelectedSubTask] = useState<SubTask | null>(null); // Store selected subtask for editing
 
   useEffect(() => {
     async function fetchSubTasks() {
@@ -38,24 +36,22 @@ export default function SubTaskCard({ taskId }: SubTaskCardProps) {
     if (taskId) fetchSubTasks();
   }, [taskId]);
 
-  async function updateSubTask(subtaskId: string, updatedData: UpdatedData) {
-    try {
-      await httpRequest.put(`/data/update-SubTask/${subtaskId}`, updatedData);
-      setSubTasks((prev) =>
-        prev.map((subtask) => (subtask._id === subtaskId ? { ...subtask, ...updatedData } : subtask))
-      );
-    } catch (error) {
-      console.error("Error updating subtask:", error);
-    }
-  }
-
   async function deleteSubTask(subtaskId: string) {
     try {
-      await httpRequest.delete(`/data/delete-Subtask/${subtaskId}`);
+      console.log("Deleting subtask with ID:", subtaskId);
+      await httpRequest.delete(`/data/delete-SubTask/${subtaskId}`, { data: { taskId } });
+      console.log("Subtask deleted successfully");
       setSubTasks((prev) => prev.filter((subtask) => subtask._id !== subtaskId));
+      setIsDeleteOpen(false);
     } catch (error) {
       console.error("Error deleting subtask:", error);
     }
+  }
+
+  function handleSubTaskUpdate(updatedSubTask: SubTask) {
+    setSubTasks((prev) =>
+      prev.map((subtask) => (subtask._id === updatedSubTask._id ? updatedSubTask : subtask))
+    );
   }
 
   return (
@@ -65,20 +61,51 @@ export default function SubTaskCard({ taskId }: SubTaskCardProps) {
           <div className="flex items-center gap-4">
             <Checkbox
               checked={subtask.completed}
-              onCheckedChange={() => updateSubTask(subtask._id, { completed: !subtask.completed })}
+              onCheckedChange={() =>
+                setSelectedSubTask({ ...subtask, completed: !subtask.completed })
+              }
             />
             <span className={subtask.completed ? "line-through text-gray-500" : ""}>{subtask.title}</span>
           </div>
           <div className="flex gap-2">
-            <Button size="icon" variant="outline" onClick={() => updateSubTask(subtask._id, { title: "Updated Subtask Title" })}>
+            {/* Open Update Popup */}
+            <Button size="icon" variant="outline" onClick={() => setSelectedSubTask(subtask)}>
               <Pencil className="w-4 h-4" />
             </Button>
-            <Button size="icon" variant="destructive" onClick={() => deleteSubTask(subtask._id)}>
+            <Button
+              size="icon"
+              variant="destructive"
+              onClick={() => {
+                setDeleteId(subtask._id);
+                setIsDeleteOpen(true);
+              }}
+            >
               <Trash className="w-4 h-4" />
             </Button>
           </div>
         </Card>
       ))}
+      {/* Update Popup */}
+      {selectedSubTask && (
+        <UpdateSubTaskPopup
+          subtask={selectedSubTask}
+          onClose={() => setSelectedSubTask(null)}
+          onUpdate={handleSubTaskUpdate}
+        />
+      )}
+      {/* Delete Confirmation Popup */}
+      <DeleteConfirmation
+        open={isDeleteOpen}
+        setOpen={setIsDeleteOpen}
+        onConfirm={() => {
+          if (deleteId) {
+            deleteSubTask(deleteId);
+          } else {
+            console.error("Delete ID is not set.");
+          }
+        }}
+        onCancel={() => setIsDeleteOpen(false)}
+      />
     </div>
   );
 }

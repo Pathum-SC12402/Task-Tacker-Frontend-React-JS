@@ -1,6 +1,7 @@
 import TaskCard from "@/components/parts/taskCard";
 import httpRequest from "@/api/request";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface FuturePlanPageProps {
   userId: string | null;
@@ -16,6 +17,7 @@ export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -45,6 +47,10 @@ export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
   
     fetchTasks();
   }, [userId]);
+
+  const handleCardClick = (taskId: string) => {
+    navigate(`/Dashboard/tasks`, { state: { taskId } });
+  };
   
   return (
     <div className="bg-gray-300 h-full rounded-md">
@@ -61,15 +67,17 @@ export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
           <p className="text-center text-gray-500">No tasks available.</p>
         ) : (
           <div className="flex-1 overflow-y-auto max-h-[calc(100vh-180px)]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">      
               {tasks.map((task) => (
-                <TaskCard
-                  key={task._id}
-                  date={new Date(task.date).toISOString().split("T")[0]}
-                  title={task.title}
-                  totalSubtasks={task.subtasks.length}
-                  completedSubtasks={task.subtasks.filter((st) => st.completed).length}
-                />
+                <div onClick={() => handleCardClick(task._id)} className="cursor-pointer">
+                  <TaskCard
+                    key={task._id}
+                    date={new Date(task.date).toISOString().split("T")[0]}
+                    title={task.title}
+                    totalSubtasks={task.subtasks.length}
+                    completedSubtasks={task.subtasks.filter((st) => st.completed).length}
+                  />
+                </div>
               ))}
             </div>
           </div>
