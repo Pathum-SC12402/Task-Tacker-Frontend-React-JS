@@ -93,6 +93,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         <UpdateTaskPopup
           taskId={taskId}
           currentTitle={title}
+          currentDate={date}
           onClose={() => setIsUpdateOpen(false)}
           onUpdate={onUpdate}
         />
