@@ -18,32 +18,32 @@ export default function PastPlanPage({ userId }: PastPlanPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchTasks = async () => {
+    if (!userId) {
+      setError("User ID not found");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await httpRequest.get(`/data/get-PastPlans/${userId}`);
+
+      if (response.data && Array.isArray(response.data.tasks)) {
+        setTasks(response.data.tasks);
+        setError(null);
+      } else {
+        setTasks([]);
+        setError("No tasks available.");
+      }
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+      setError("Failed to fetch tasks. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasks = async () => {
-      if (!userId) {
-        setError("User ID not found");
-        setLoading(false);
-        return;
-      }
-  
-      try {
-        const response = await httpRequest.get(`/data/get-PastPlans/${userId}`);
-  
-        if (response.data && Array.isArray(response.data.tasks)) {
-          setTasks(response.data.tasks);
-          setError(null);
-        } else {
-          setTasks([]);
-          setError("No tasks available.");
-        }
-      } catch (err) {
-        console.error("Error fetching tasks:", err);
-        setError("Failed to fetch tasks. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-  
     fetchTasks();
   }, [userId]);
  
@@ -72,8 +72,8 @@ export default function PastPlanPage({ userId }: PastPlanPageProps) {
                     title={task.title}
                     totalSubtasks={task.subtasks.length}
                     completedSubtasks={task.subtasks.filter((st) => st.completed).length}
-                    onUpdate={() => console.log(`Update task ${task._id}`)}
-                    onDelete={() => console.log(`Delete task ${task._id}`)}
+                    onUpdate={() => fetchTasks()}
+                    onDelete={() => fetchTasks()}   
                     onView={() => console.log(`View task ${task._id}`)}
                   />
                 </div>
