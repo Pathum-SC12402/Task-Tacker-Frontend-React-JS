@@ -22,7 +22,7 @@ export default function SubTaskPage() {
         if (!newTaskTitle.trim()) return;
 
         try {
-            const response = await httpRequest.post(`/data/add-subTask/${taskId}`, {
+            const response = await httpRequest.post(`/data/create-subTask/${taskId}`, {
                 title: newTaskTitle,
                 completed: isCompleted,
             });
@@ -42,8 +42,6 @@ export default function SubTaskPage() {
     };
 
     const handleBack = () => {
-        console.log("Back button clicked");
-        
         if(pageId === 1) {
             navigate("/Dashboard/Past_Plans");
         }else if(pageId === 2) {
