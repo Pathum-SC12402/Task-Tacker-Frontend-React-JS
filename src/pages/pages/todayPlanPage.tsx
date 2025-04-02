@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import TaskCard from "@/components/parts/taskCard";
 import httpRequest from "@/api/request";
-import { useNavigate } from "react-router-dom";
 
 interface TodayPlanPageProps {
   userId: string | null;
@@ -47,12 +46,6 @@ export default function TodayPlanPage({ userId }: TodayPlanPageProps) {
     fetchTasks();
   }, [userId]);
 
-  const navigate = useNavigate();
-
-  const handleCardClick = (taskId: string) => {
-      navigate(`/Dashboard/tasks`, { state: { taskId } });
-  };  
-
   return (
     <div className="bg-gray-300 h-full rounded-md">
       <div className="flex flex-col p-4">
@@ -70,13 +63,17 @@ export default function TodayPlanPage({ userId }: TodayPlanPageProps) {
           <div className="flex-1 overflow-y-auto max-h-[calc(100vh-180px)]">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {tasks.map((task) => (
-                <div onClick={() => handleCardClick(task._id)} className="cursor-pointer">
+                <div>
                   <TaskCard
                     key={task._id}
+                    taskId={task._id}
                     date={new Date(task.date).toISOString().split("T")[0]}
                     title={task.title}
                     totalSubtasks={task.subtasks.length}
                     completedSubtasks={task.subtasks.filter((st) => st.completed).length}
+                    onUpdate={() => console.log(`Update task ${task._id}`)}
+                    onDelete={() => console.log(`Delete task ${task._id}`)}
+                    onView={() => console.log(`View task ${task._id}`)}
                   />
                 </div>
               ))}

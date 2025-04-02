@@ -78,7 +78,6 @@ export default function AddPlansPage({ userId }: addPlanPageProps) {
           <div className="flex-1 p-4">
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {/* Date Input */}
                 <FormField
                   control={form.control}
                   name="date"
@@ -92,8 +91,7 @@ export default function AddPlansPage({ userId }: addPlanPageProps) {
                     </FormItem>
                   )}
                 />
-
-                {/* Title Input */}
+                  
                 <FormField
                   control={form.control}
                   name="title"
@@ -108,7 +106,6 @@ export default function AddPlansPage({ userId }: addPlanPageProps) {
                   )}
                 />
 
-                {/* Subtasks */}
                 <FormField
                   control={form.control}
                   name="subtasks"
