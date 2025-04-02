@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import httpRequest from "@/api/request";
 
 interface TaskCardProps {
+  pageId: number;
   taskId: string;
   date?: string;
   title?: string;
@@ -20,6 +21,7 @@ interface TaskCardProps {
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
+  pageId,
   taskId,
   date = new Date().toISOString().split("T")[0],
   title,
@@ -37,7 +39,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
     : 0;
 
   function onView(taskId: string): void {
-    navigate(`/Dashboard/tasks`, { state: { taskId } });
+    navigate(`/Dashboard/tasks`, { state: { taskId , pageId} });
   }
 
   async function handleDelete(taskId: string ) {

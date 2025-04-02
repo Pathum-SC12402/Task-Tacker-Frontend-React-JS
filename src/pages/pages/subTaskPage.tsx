@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import httpRequest from "@/api/request";
+import { useNavigate } from "react-router-dom";
 
 export default function SubTaskPage() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [taskId] = useState(location.state?.taskId ?? "");
+    const [pageId] = useState(location.state?.pageId ?? 0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newTaskTitle, setNewTaskTitle] = useState("");
     const [isCompleted, setIsCompleted] = useState(false);
@@ -38,13 +41,30 @@ export default function SubTaskPage() {
         }
     };
 
+    const handleBack = () => {
+        console.log("Back button clicked");
+        
+        if(pageId === 1) {
+            navigate("/Dashboard/Past_Plans");
+        }else if(pageId === 2) {
+            navigate("/Dashboard/Today_Plans");
+        }else if(pageId === 3) {
+            navigate("/Dashboard/Future_Plans");    
+        }
+    }
+
     return (
         <div className="bg-gray-300 h-full container mx-auto p-6">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold">Subtasks</h2>
-                <Button onClick={() => setIsModalOpen(true)} variant="default">
-                    Add Task
-                </Button>
+                <div className="ml-auto flex space-x-2">
+                    <Button onClick={handleBack} variant="outline">
+                        Back
+                    </Button>
+                    <Button onClick={() => setIsModalOpen(true)} variant="default">
+                        Add Task
+                    </Button>
+                </div>
             </div>
 
             <SubTaskCard taskId={taskId} />

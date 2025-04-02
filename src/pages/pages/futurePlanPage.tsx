@@ -16,6 +16,7 @@ export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [pageId] = useState(3);
 
   const fetchTasks = async () => {
     if (!userId) {
@@ -65,6 +66,7 @@ export default function FuturePlanPage({ userId }: FuturePlanPageProps) {
               {tasks.map((task) => (
                 <div>
                   <TaskCard
+                    pageId={pageId}
                     key={task._id}
                     taskId={task._id}
                     date={new Date(task.date).toISOString().split("T")[0]}
