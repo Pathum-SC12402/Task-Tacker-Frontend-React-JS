@@ -24,11 +24,6 @@ import {
 import logo from "@/assets/logo.jpeg"
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -89,6 +84,19 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const userId = localStorage.getItem("userId") || "";
+  const [userData, setUserData] = React.useState<{ name: string; email: string } | null>(null);
+
+  React.useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8000/api/data/get-userDetails/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setUserData({ name: data.name, email: data.email });
+        })
+        .catch((error) => console.error("Error fetching user data:", error));
+    }
+  }, [userId]);
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -117,8 +125,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto font-bold" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {userData && <NavUser user={userData} />}
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
