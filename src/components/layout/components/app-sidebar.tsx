@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import httpRequest from "@/api/request"
 import {
   Settings2,
   SquareTerminal,
@@ -89,8 +90,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   React.useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8000/api/data/get-userDetails/${userId}`)
-        .then((response) => response.json())
+      httpRequest.get(`/data/get-userDetails/${userId}`)
+        .then((response) => response.data)
         .then((data) => {
           setUserData({ name: data.name, email: data.email });
         })

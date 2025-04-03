@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import httpRequest from "@/api/request";
 
 interface DashboardPageProps {
   userId: string | null;
@@ -26,9 +27,9 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8000/api/data/get-taskQty/${userId}`)
-        .then((response) => response.json())
-        .then((data) => {
+      httpRequest.get(`/data/get-taskQty/${userId}`)
+        .then((response) => {
+          const data = response.data;
           setTaskStats({
             totalTasks: data.totalTasks,
             completedTasks: data.completedTasks,
@@ -41,9 +42,9 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8000/api/data/get-recentTasks/${userId}`)
-        .then((response) => response.json())
-        .then((data) => {
+      httpRequest.get(`/data/get-recentTasks/${userId}`)
+        .then((response) => {
+          const data = response.data;
           setRecentTasks(data.recentTasks);
         })
         .catch((error) => console.error("Error fetching recent tasks:", error));
@@ -52,9 +53,9 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
 
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:8000/api/data/get-subTasksQtyforThisWeek/${userId}`)
-        .then((response) => response.json())
-        .then((data) => {
+      httpRequest.get(`/data/get-subTasksQtyforThisWeek/${userId}`)
+        .then((response) => {
+          const data = response.data;
           setTaskData(
             data.weekTaskData.map((entry: { day: string; count: number }) => ({
               name: entry.day,
