@@ -1,26 +1,71 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
-const taskData = [
-  { name: "Mon", tasks: 3 },
-  { name: "Tue", tasks: 5 },
-  { name: "Wed", tasks: 2 },
-  { name: "Thu", tasks: 7 },
-  { name: "Fri", tasks: 6 },
-];
-
-const recentTasks = [
-  { task: "Design UI", status: "Completed", dueDate: "Feb 25, 2025" },
-  { task: "API Integration", status: "In Progress", dueDate: "Feb 28, 2025" },
-  { task: "Bug Fixing", status: "Pending", dueDate: "Mar 2, 2025" },
-];
-
 interface DashboardPageProps {
   userId: string | null;
 }
+
 export default function DashboardPage({ userId }: DashboardPageProps) {
+  const [taskStats, setTaskStats] = useState({
+    totalTasks: 0,
+    completedTasks: 0,
+    pendingTasks: 0,
+  });
+
+  interface Task {
+    taskTitle: string;
+    taskStatus: string;
+    taskDate: string;
+  }
+
+  const [recentTasks, setRecentTasks] = useState<Task[]>([]);
+  const [taskData, setTaskData] = useState<{ name: string; tasks: number }[]>([]);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8000/api/data/get-taskQty/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setTaskStats({
+            totalTasks: data.totalTasks,
+            completedTasks: data.completedTasks,
+            pendingTasks: data.pendingTasks,
+          });
+        })
+        .catch((error) => console.error("Error fetching task data:", error));
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8000/api/data/get-recentTasks/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setRecentTasks(data.recentTasks);
+        })
+        .catch((error) => console.error("Error fetching recent tasks:", error));
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:8000/api/data/get-subTasksQtyforThisWeek/${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setTaskData(
+            data.weekTaskData.map((entry: { day: string; count: number }) => ({
+              name: entry.day,
+              tasks: entry.count,
+            }))
+          );
+        })
+        .catch((error) => console.error("Error fetching weekly task data:", error));
+    }
+  }, [userId]);
+
   return (
     <div className="p-4 space-y-4 over">
       <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -30,7 +75,7 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
             <CardTitle>Total Tasks</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">24</p>
+            <p className="text-2xl font-bold">{taskStats.totalTasks}</p>
           </CardContent>
         </Card>
 
@@ -39,7 +84,7 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
             <CardTitle>Completed</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-green-500">18</p>
+            <p className="text-2xl font-bold text-green-500">{taskStats.completedTasks}</p>
           </CardContent>
         </Card>
 
@@ -48,7 +93,7 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
             <CardTitle>Pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-yellow-500">6</p>
+            <p className="text-2xl font-bold text-yellow-500">{taskStats.pendingTasks}</p>
           </CardContent>
         </Card>
       </div>
@@ -69,21 +114,21 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
             <TableBody>
               {recentTasks.map((task, index) => (
                 <TableRow key={index}>
-                  <TableCell>{task.task}</TableCell>
+                  <TableCell>{task.taskTitle}</TableCell>
                   <TableCell>
                     <Badge
                       variant={
-                        task.status === "Completed"
+                        task.taskStatus === "Completed"
                           ? "default"
-                          : task.status === "In Progress"
+                          : task.taskStatus === "In Progress"
                           ? "secondary"
                           : "destructive"
                       }
                     >
-                      {task.status}
+                      {task.taskStatus}
                     </Badge>
                   </TableCell>
-                  <TableCell>{task.dueDate}</TableCell>
+                  <TableCell>{task.taskDate}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
