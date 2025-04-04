@@ -27,7 +27,6 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { UserAccount } from "@/components/parts/userAccount";
 import { useNavigate } from "react-router-dom";
-import httpRequest from "@/api/request";
 
 
 export function NavUser({
@@ -51,7 +50,7 @@ export function NavUser({
       localStorage.removeItem("user");
       sessionStorage.removeItem("user");
 
-      navigate("/Login", { replace: true });
+      navigate("/", { replace: true });
       window.location.reload();
     } catch (error) {
         console.error("Error logging out:", error);

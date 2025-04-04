@@ -9,100 +9,70 @@ interface DashboardPageProps {
   userId: string | null;
 }
 
+interface Task {
+  taskTitle: string;
+  taskStatus: string;
+  taskDate: string;
+}
+
 export default function DashboardPage({ userId }: DashboardPageProps) {
-  const [taskStats, setTaskStats] = useState({
-    totalTasks: 0,
-    completedTasks: 0,
-    pendingTasks: 0,
-  });
-
-  interface Task {
-    taskTitle: string;
-    taskStatus: string;
-    taskDate: string;
-  }
-
+  const [taskStats, setTaskStats] = useState({ totalTasks: 0, completedTasks: 0, pendingTasks: 0 });
   const [recentTasks, setRecentTasks] = useState<Task[]>([]);
   const [taskData, setTaskData] = useState<{ name: string; tasks: number }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (userId) {
-      httpRequest.get(`/data/get-taskQty/${userId}`)
-        .then((response) => {
-          const data = response.data;
-          setTaskStats({
-            totalTasks: data.totalTasks,
-            completedTasks: data.completedTasks,
-            pendingTasks: data.pendingTasks,
-          });
-        })
-        .catch((error) => console.error("Error fetching task data:", error));
-    }
-  }, [userId]);
+    if (!userId) return;
 
-  useEffect(() => {
-    if (userId) {
-      httpRequest.get(`/data/get-recentTasks/${userId}`)
-        .then((response) => {
-          const data = response.data;
-          setRecentTasks(data.recentTasks);
-        })
-        .catch((error) => console.error("Error fetching recent tasks:", error));
-    }
-  }, [userId]);
+    setLoading(true);
+    setError(null);
 
-  useEffect(() => {
-    if (userId) {
+    Promise.all([
+      httpRequest.get(`/data/get-taskQty/${userId}`),
+      httpRequest.get(`/data/get-recentTasks/${userId}`),
       httpRequest.get(`/data/get-subTasksQtyforThisWeek/${userId}`)
-        .then((response) => {
-          const data = response.data;
-          setTaskData(
-            data.weekTaskData.map((entry: { day: string; count: number }) => ({
-              name: entry.day,
-              tasks: entry.count,
-            }))
-          );
-        })
-        .catch((error) => console.error("Error fetching weekly task data:", error));
-    }
+    ])
+      .then(([taskQtyRes, recentTasksRes, weeklyTasksRes]) => {
+        setTaskStats({
+          totalTasks: taskQtyRes.data.totalTasks,
+          completedTasks: taskQtyRes.data.completedTasks,
+          pendingTasks: taskQtyRes.data.pendingTasks,
+        });
+
+        setRecentTasks(recentTasksRes.data.recentTasks);
+
+        setTaskData(
+          weeklyTasksRes.data.weekTaskData.map((entry: { day: string; count: number }) => ({
+            name: entry.day,
+            tasks: entry.count,
+          }))
+        );
+      })
+      .catch((err) => {
+        console.error("Error fetching dashboard data:", err);
+        setError("Failed to load dashboard data.");
+      })
+      .finally(() => setLoading(false));
   }, [userId]);
+
+  if (loading) return <p className="text-center text-lg">Loading dashboard...</p>;
+  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="p-4 space-y-4 over">
+    <div className="p-4 space-y-4">
       <h1 className="text-3xl font-bold">Dashboard</h1>
+      
+      {/* Task Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Total Tasks</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{taskStats.totalTasks}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Completed</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-green-500">{taskStats.completedTasks}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Pending</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-yellow-500">{taskStats.pendingTasks}</p>
-          </CardContent>
-        </Card>
+        <StatCard title="Total Tasks" value={taskStats.totalTasks} color="text-red-500"/>
+        <StatCard title="Completed" value={taskStats.completedTasks} color="text-green-500" />
+        <StatCard title="Pending" value={taskStats.pendingTasks} color="text-yellow-500" />
       </div>
 
+      {/* Recent Tasks Table */}
       <Card>
-        <CardHeader>
-          <CardTitle>Recent Tasks</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Recent Tasks</CardTitle></CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
@@ -113,34 +83,32 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {recentTasks.map((task, index) => (
-                <TableRow key={index}>
-                  <TableCell>{task.taskTitle}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        task.taskStatus === "Completed"
-                          ? "default"
-                          : task.taskStatus === "In Progress"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                    >
-                      {task.taskStatus}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{task.taskDate}</TableCell>
-                </TableRow>
-              ))}
+              {recentTasks.length > 0 ? (
+                recentTasks.map((task, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{task.taskTitle}</TableCell>
+                    <TableCell>
+                      <Badge variant={
+                        task.taskStatus === "Completed" ? "default" :
+                        task.taskStatus === "In Progress" ? "secondary" : "destructive"
+                      }>
+                        {task.taskStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{task.taskDate}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow><TableCell colSpan={3} className="text-center">No recent tasks found.</TableCell></TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
+      {/* Weekly Task Progress Chart */}
       <Card>
-        <CardHeader>
-          <CardTitle>Task Progress (Weekly)</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Task Progress (Weekly)</CardTitle></CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={taskData}>
@@ -155,3 +123,13 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
     </div>
   );
 }
+
+// Reusable Card Component for Task Stats
+const StatCard = ({ title, value, color = "text-black" }: { title: string; value: number; color?: string }) => (
+  <Card>
+    <CardHeader><CardTitle>{title}</CardTitle></CardHeader>
+    <CardContent>
+      <p className={`text-2xl font-bold ${color}`}>{value}</p>
+    </CardContent>
+  </Card>
+);
