@@ -3,7 +3,6 @@
 import * as React from "react"
 import httpRequest from "@/api/request"
 import {
-  Settings2,
   SquareTerminal,
   ClipboardList,
   Mail,
@@ -63,12 +62,7 @@ const data = {
       title: "Contact Us",
       url: "/Dashboard/Contact_Us",
       icon: Mail,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
+    }
   ],
   calendars: [
     {
