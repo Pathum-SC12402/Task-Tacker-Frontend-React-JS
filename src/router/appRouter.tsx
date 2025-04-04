@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import Spinner from "./spinner"; // The spinner component you created
+import Spinner from "../components/shared/spinner"; // The spinner component you created
 
 // Lazy load the components
 const Page = lazy(() => import("@/components/auth/index"));

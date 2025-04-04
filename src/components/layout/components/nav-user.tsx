@@ -27,7 +27,7 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { UserAccount } from "@/components/parts/userAccount";
 import { useNavigate } from "react-router-dom";
-import { SuccessPopup } from "@/components/parts/SuccessPopup";
+import { SuccessPopup } from "@/components/shared/SuccessPopup";
 
 
 export function NavUser({

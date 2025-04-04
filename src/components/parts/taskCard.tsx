@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { CalendarIcon, CheckCircleIcon, Pencil, Trash, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UpdateTaskPopup from "@/components/parts/updateTask"; // Update Popup Component
-import DeleteConfirmation from "@/components/parts/deleteConf"; // Delete Confirmation Popup
+import DeleteConfirmation from "@/components/shared/deleteConf"; // Delete Confirmation Popup
 import { useNavigate } from "react-router-dom";
 import httpRequest from "@/api/request";
 

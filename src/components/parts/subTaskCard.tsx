@@ -4,7 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card } from "@/components/ui/card";
 import { Pencil, Trash } from "lucide-react";
 import httpRequest from "@/api/request";
-import DeleteConfirmation from "@/components/parts/deleteConf";
+import DeleteConfirmation from "@/components/shared/deleteConf";
 import UpdateSubTaskPopup from "@/components/parts/updateSubTask"; // Import the update popup component
 
 interface SubTaskCardProps {
