@@ -104,14 +104,14 @@ export function UserAccount() {
         setPasswordMessage("Password changed successfully!");
         setOldPassword("");
         setNewPassword("");
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-        localStorage.removeItem("userId");
-        sessionStorage.removeItem("userId");
-        localStorage.removeItem("user");
-        sessionStorage.removeItem("user");
+        // localStorage.removeItem("token");
+        // sessionStorage.removeItem("token");
+        // localStorage.removeItem("userId");
+        // sessionStorage.removeItem("userId");
+        // localStorage.removeItem("user");
+        // sessionStorage.removeItem("user");
 
-        navigate("/Login", { replace: true });
+        navigate("/Dashboard", { replace: true });
         window.location.reload();
       } else {
         setPasswordMessage("Failed to change password.");

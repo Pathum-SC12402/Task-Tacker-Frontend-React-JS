@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { LoginForm } from "./components/loginForm"
 import { SignUpForm } from "./components/signupForm"
+import { ChangePasswordForm } from "./components/changeFpwd"
 
 export default function PlansPage() {
   return (
@@ -9,6 +10,7 @@ export default function PlansPage() {
         <Routes>
           <Route path="Login" element={<LoginForm />} />
           <Route path="Signup" element={<SignUpForm />} />
+          <Route path="ChangePwd" element={<ChangePasswordForm />} />
         </Routes>
       </div>
     </div>

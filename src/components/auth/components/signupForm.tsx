@@ -50,7 +50,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
     setLoading(true);
     try {
       await httpRequest.patch("/auth/send-verification-code-new-user", formData);
-      setShowVerification(true); // Show the verification popup
+      setShowVerification(true);
     } catch (err) {
       setError("Signup failed. Please try again.");
       console.error(err);

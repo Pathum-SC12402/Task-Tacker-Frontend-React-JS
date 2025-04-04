@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import httpRequest from "@/api/request";
+import FpVerification from "./fpVerification";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -22,6 +23,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [showVerification, setShowVerification] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,7 +58,29 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
     } catch (err) {
       setError("An error occurred. Please try again.");
     }
+  };
+
+  const handleForgotPassword = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+  
+    if (!email) {
+      setError("Please enter your email first.");
+      return;
+    }
+  
+    try {
+      const response = await httpRequest.patch("/auth/send-verification-code", { email });
+  
+      if (response.status === 200) {
+        setShowVerification(true);
+      } else {
+        setError("Failed to send verification code. Try again.");
+      }
+    } catch (err) {
+      setError("Error sending verification code.");
+    }
   };  
+  
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -87,6 +111,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                   <a
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    onClick={handleForgotPassword}
                   >
                     Forgot your password?
                   </a>
@@ -113,6 +138,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           </form>
         </CardContent>
       </Card>
+      {showVerification && <FpVerification email={email} onClose={() => setShowVerification(false)} />}
     </div>
   );
 }
