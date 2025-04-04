@@ -18,9 +18,12 @@ import {
 } from "@/components/ui/tabs";
 import httpRequest from "@/api/request";
 import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
-export function UserAccount() {
+interface UserAccountProps {
+  onSubmit: () => void;
+}
+
+export function UserAccount({ onSubmit }: UserAccountProps) {
   const userId = localStorage.getItem("userId");
   const authToken = localStorage.getItem("token");
   const [name, setName] = useState("John Doe");
@@ -33,7 +36,7 @@ export function UserAccount() {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const navigate = useNavigate();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -60,29 +63,24 @@ export function UserAccount() {
   const handleSaveChanges = async () => {
     setLoading(true);
     setMessage("");
+    setShowSuccess(false);
+  
     try {
-      const response = await httpRequest.put(
-        `/data/update-userDetails/${userId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email }),
-        }
-      );
-
-      const data = response.data;
+      const updatedData = { name, email };
+      const response = await httpRequest.put(`/data/update-userDetails/${userId}`, updatedData);
+      
       if (response.status >= 200 && response.status < 300) {
-        setMessage("User details updated successfully!");
+        onSubmit();
       } else {
-        setMessage(data.message || "Failed to update user details.");
+        setMessage(response.data.message || "Failed to update user details.");
       }
     } catch (error) {
       setMessage("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+  
 
   const handleChangePassword = async () => {
     setPasswordLoading(true);
@@ -104,15 +102,8 @@ export function UserAccount() {
         setPasswordMessage("Password changed successfully!");
         setOldPassword("");
         setNewPassword("");
-        // localStorage.removeItem("token");
-        // sessionStorage.removeItem("token");
-        // localStorage.removeItem("userId");
-        // sessionStorage.removeItem("userId");
-        // localStorage.removeItem("user");
-        // sessionStorage.removeItem("user");
 
-        navigate("/Dashboard", { replace: true });
-        window.location.reload();
+        onSubmit();
       } else {
         setPasswordMessage("Failed to change password.");
       }

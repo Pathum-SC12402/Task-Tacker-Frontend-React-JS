@@ -19,14 +19,9 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
   const [taskStats, setTaskStats] = useState({ totalTasks: 0, completedTasks: 0, pendingTasks: 0 });
   const [recentTasks, setRecentTasks] = useState<Task[]>([]);
   const [taskData, setTaskData] = useState<{ name: string; tasks: number }[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!userId) return;
-
-    setLoading(true);
-    setError(null);
 
     Promise.all([
       httpRequest.get(`/data/get-taskQty/${userId}`),
@@ -51,13 +46,8 @@ export default function DashboardPage({ userId }: DashboardPageProps) {
       })
       .catch((err) => {
         console.error("Error fetching dashboard data:", err);
-        setError("Failed to load dashboard data.");
       })
-      .finally(() => setLoading(false));
   }, [userId]);
-
-  if (loading) return <p className="text-center text-lg">Loading dashboard...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="p-4 space-y-4">

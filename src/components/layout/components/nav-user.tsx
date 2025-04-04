@@ -27,6 +27,7 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { UserAccount } from "@/components/parts/userAccount";
 import { useNavigate } from "react-router-dom";
+import { SuccessPopup } from "@/components/parts/SuccessPopup";
 
 
 export function NavUser({
@@ -40,6 +41,7 @@ export function NavUser({
   const { isMobile } = useSidebar();
   const [isAccountOpen, setIsAccountOpen] = useState(false);
   const navigate = useNavigate();
+  const [showSuccess, setShowSuccess] = useState(false);
   
   const handleLogout = async () => {
     try {
@@ -56,7 +58,11 @@ export function NavUser({
         console.error("Error logging out:", error);
     }
 };
-
+  const handleRefresh = () => {
+    setIsAccountOpen(false);
+    navigate(0);
+    setShowSuccess(true);
+  };
 
   return (
     <SidebarMenu>
@@ -110,16 +116,13 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <Dialog open={isAccountOpen} onOpenChange={setIsAccountOpen}>
+              <Dialog>
                 <DialogTrigger asChild>
-                  <DropdownMenuItem onSelect={() => setIsAccountOpen(true)}>
-                    <BadgeCheck />
-                    Account
-                  </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setIsAccountOpen(true)}>
+                  <BadgeCheck />
+                  Account
+                </DropdownMenuItem>
                 </DialogTrigger>
-                <DialogContent>
-                  <UserAccount />
-                </DialogContent>
               </Dialog>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -130,6 +133,17 @@ export function NavUser({
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
+      <Dialog open={isAccountOpen} onOpenChange={setIsAccountOpen}>
+        <DialogContent className="max-w-md">
+          <UserAccount onSubmit={handleRefresh}/>
+        </DialogContent>
+      </Dialog>
+      {showSuccess && (
+          <SuccessPopup
+            message="User details updated successfully!"
+            onClose={() => setShowSuccess(false)}
+          />
+        )}
     </SidebarMenu>
   );
 }
