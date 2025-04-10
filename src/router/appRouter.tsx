@@ -6,6 +6,7 @@ import Spinner from "../components/shared/spinner"; // The spinner component you
 const Page = lazy(() => import("@/components/auth/index"));
 const Layout = lazy(() => import("@/components/layout/index"));
 const NotFoundPage = lazy(() => import("@/pages/auth/notFoundPage"));
+const AdminDashboard = lazy(() => import("@/pages/dashboard/adminDashboard"));
 const DashboardPage = lazy(() => import("@/pages/dashboard/dashboardPage"));
 const AddPlansPage = lazy(() => import("@/pages/pages/addPlanPage"));
 const TodayPlanPage = lazy(() => import("@/pages/pages/todayPlanPage"));
@@ -26,7 +27,7 @@ export default function AppRouter() {
           <Route path="/" element={<StartPage />} />
           <Route path="/*" element={<Page />} />
 
-          {/* Dashboard Routes */}
+          <Route path="/Admin_Dashboard" element={<AdminDashboard />} />
           <Route path="/Dashboard/" element={<Layout />}>
             <Route index element={<DashboardPage userId={userId} />} />
             <Route path="Add_Plans" element={<AddPlansPage userId={userId} />} />
