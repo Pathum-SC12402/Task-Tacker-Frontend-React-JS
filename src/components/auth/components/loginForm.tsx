@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import httpRequest from "@/api/request";
 import FpVerification from "./fpVerification";
+import { set } from "date-fns";
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -47,11 +48,23 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             }
             const userData = userResponse.data;
             const userId = userData.userId;
+            console.log("Data:", userData);
 
             localStorage.setItem("userId", userId);
             console.log("User ID:", userId);
-
-        navigate(`/dashboard`);
+            const userDetails = await httpRequest.get(`/data/get-userRole/${userId}`);
+            console.log("code:", userDetails.status);
+            if (userDetails.status !== 200) {
+              throw new Error("Failed to fetch user details");
+            }else{
+              const userDetailsData = userDetails.data;
+              console.log("User Details:", userDetailsData);
+              if(userDetailsData.role === "admin"){
+                navigate("/Admin_Dashboard");
+              }else if(userDetailsData.role === "user"){
+                navigate("/Dashboard/");
+              }
+            }
       } else {
         setError(data.message || "Login failed");
       }
