@@ -51,13 +51,12 @@ export default function AddPlansPage({ userId }: addPlanPageProps) {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await httpRequest.post("/data/create-task", {
+        await httpRequest.post("/data/create-task", {
         userId,
         date: data.date,
         title: data.title,
         subtasks: data.subtasks,
       });
-      console.log("Task Created Successfully:", response.data);
       form.reset();
     } catch (error) {
       console.error("Error creating task:", error);

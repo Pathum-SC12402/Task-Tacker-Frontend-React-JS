@@ -101,13 +101,13 @@ export default function StartPage() {
           <a href="mailto:support@tasktracker.com" className="flex items-center space-x-2 hover:text-green-400">
             <Mail size={20} /> <span>Email</span>
           </a>
-          <a href="https://facebook.com/tasktracker" className="flex items-center space-x-2 hover:text-blue-500">
+          <a href="#" className="flex items-center space-x-2 hover:text-blue-500">
             <Facebook size={20} /> <span>Facebook</span>
           </a>
-          <a href="https://twitter.com/tasktracker" className="flex items-center space-x-2 hover:text-blue-400">
+          <a href="#" className="flex items-center space-x-2 hover:text-blue-400">
             <Twitter size={20} /> <span>Twitter</span>
           </a>
-          <a href="https://instagram.com/tasktracker" className="flex items-center space-x-2 hover:text-pink-500">
+          <a href="#" className="flex items-center space-x-2 hover:text-pink-500">
             <Instagram size={20} /> <span>Instagram</span>
           </a>
         </div>

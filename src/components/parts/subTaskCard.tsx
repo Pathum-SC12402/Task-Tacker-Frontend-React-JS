@@ -38,9 +38,7 @@ export default function SubTaskCard({ taskId }: SubTaskCardProps) {
 
   async function deleteSubTask(subtaskId: string) {
     try {
-      console.log("Deleting subtask with ID:", subtaskId);
       await httpRequest.delete(`/data/delete-SubTask/${subtaskId}`, { data: { taskId } });
-      console.log("Subtask deleted successfully");
       setSubTasks((prev) => prev.filter((subtask) => subtask._id !== subtaskId));
       setIsDeleteOpen(false);
     } catch (error) {

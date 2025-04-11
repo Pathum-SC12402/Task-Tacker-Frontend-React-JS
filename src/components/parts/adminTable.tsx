@@ -28,7 +28,6 @@ export function UserListTable() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  // Fetch user data on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -49,14 +48,12 @@ export function UserListTable() {
     if (selectedUserId) {
       try {
         const response = await httpRequest.delete(`/data/delete-user/${selectedUserId}`);
-        console.log("Response:", response);
-        console.log("Response status:", response.status);
         if (response.status !== 200) {
           throw new Error("Failed to delete user");
         }
         setUserData((prevUsers) => prevUsers.filter((user) => user._id !== selectedUserId));
         setIsDeleteOpen(false);
-        setSelectedUserId(null); // Reset selected user ID after deletion
+        setSelectedUserId(null);
       } catch (error) {
         console.error("Error deleting user:", error);
       }

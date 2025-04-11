@@ -28,7 +28,6 @@ export default function TodayPlanPage({ userId }: TodayPlanPageProps) {
 
     try {
       const response = await httpRequest.get(`/data/get-TodayPlans/${userId}`);
-      console.log("Full API Response:", response.data);
 
       if (Array.isArray(response.data)) {
         setTasks(response.data);
