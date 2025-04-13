@@ -25,7 +25,7 @@ export default function ContactUsPage() {
                     <div className="mt-6 space-y-3">
                         <div className="flex items-center gap-2">
                             <Mail className="w-5 h-5" />
-                            <span>support@tasktracker.com</span>
+                            <span>task.tracker.sl@gmail.com</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Phone className="w-5 h-5" />
@@ -33,7 +33,7 @@ export default function ContactUsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                             <MapPin className="w-5 h-5" />
-                            <span>123 Task Street, Productivity City</span>
+                            <span>Kalutara, Sri Lanka</span>
                         </div>
                     </div>
                     <div className="mt-6 text-center">
