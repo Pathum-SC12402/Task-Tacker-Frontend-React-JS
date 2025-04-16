@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AxiosInstance } from 'axios';
 
 const httpRequest: AxiosInstance = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: "https://walrus-app-yz4yn.ondigitalocean.app/api",
     timeout: 10000,
     headers: {
         "Content-Type": "application/json",
